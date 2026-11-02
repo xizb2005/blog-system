@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo3.mapper.UserMapper">
+    <!-- PageHelper分页插件 -->
+
+        <select id="selectByUsername" resultType="com.example.demo3.entity.User">
+            select id,username,password from user where username=#{username}
+        </select>
+
+    <!-- 自定义映射：一对多关联用户+订单 -->
+    <resultMap id="UserOrderResultMap" type="User">
+        <id column="u_id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="age" property="age"/>
+        <collection property="orderList" javaType="java.util.List" ofType="com.example.demo3.entity.Order">
+            <id column="o_id" property="id"/>
+            <result column="order_name" property="orderName"/>
+            <result column="price" property="price"/>
+            <result column="user_id" property="userId"/>
+        </collection>
+    </resultMap>
+    <!-- 左连接查询：保留所有用户，无订单也会显示用户信息 -->
+    <select id="selectUserWithOrder" resultMap="UserOrderResultMap">
+        SELECT
+            u.id u_id,
+            u.username,
+            u.age,
+            o.id o_id,
+            o.order_name,
+            o.price,
+            o.user_id
+        FROM user u
+                 LEFT JOIN orders o ON u.id = o.user_id
+    </select>
+    <select id="selectAllUser" resultType="User">
+        SELECT id,username,age FROM user
+    </select>
+</mapper>

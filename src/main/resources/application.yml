@@ -1,0 +1,35 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test_db?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD}
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.demo3.entity
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n"
+  level:
+    root: info
+    com.example.demo3: debug
+    org.springframework: info
+    org.mybatis: info
+  file:
+    name: logs/demo3.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  expiration: 86400000
+
+llm:
+  api-key: ${LLM_API_KEY}
+  api-url: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
